@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pixel Art Scaling</title>
+  <title>Pixel Art Viewer</title>
   <style>
     .pixel-art {
       width: 400px;
@@ -14,15 +14,37 @@
 
     body {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
       background-color: #f4f4f4;
     }
+
+    input {
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
   <img class="pixel-art" src="pixel-art.png" alt="Pixel Art">
+  <input type="file" accept="image/*" id="upload" />
+
+  <script>
+    const fileInput = document.getElementById('upload');
+    const img = document.querySelector('.pixel-art');
+
+    fileInput.addEventListener('change', (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  </script>
 </body>
 </html>
