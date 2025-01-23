@@ -5,13 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pixel Art Viewer</title>
   <style>
-    .pixel-art {
-      width: 400px;
-      height: 400px;
-      image-rendering: pixelated;
-      image-rendering: crisp-edges;
-    }
-
     body {
       display: flex;
       flex-direction: column;
@@ -20,10 +13,74 @@
       height: 100vh;
       margin: 0;
       background-color: #f4f4f4;
+      transition: background-color 0.5s ease;
     }
 
-    input {
+    .pixel-art {
+      width: 400px;
+      height: 400px;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    input[type="file"] {
       margin-top: 20px;
+    }
+
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .toggle-label {
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 50px;
+      height: 25px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: 0.4s;
+      border-radius: 25px;
+    }
+
+    .slider::before {
+      position: absolute;
+      content: "";
+      height: 17px;
+      width: 17px;
+      left: 4px;
+      bottom: 4px;
+      background-color: white;
+      transition: 0.4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #333;
+    }
+
+    input:checked + .slider::before {
+      transform: translateX(25px);
     }
   </style>
 </head>
@@ -31,9 +88,19 @@
   <img class="pixel-art" src="pixel-art.png" alt="Pixel Art">
   <input type="file" accept="image/*" id="upload" />
 
+  <div class="toggle-container">
+    <span class="toggle-label">Toggle Background</span>
+    <label class="toggle-switch">
+      <input type="checkbox" id="background-toggle">
+      <span class="slider"></span>
+    </label>
+  </div>
+
   <script>
     const fileInput = document.getElementById('upload');
     const img = document.querySelector('.pixel-art');
+    const backgroundToggle = document.getElementById('background-toggle');
+    const body = document.body;
 
     fileInput.addEventListener('change', (event) => {
       const file = event.target.files[0];
@@ -43,6 +110,14 @@
           img.src = e.target.result;
         };
         reader.readAsDataURL(file);
+      }
+    });
+
+    backgroundToggle.addEventListener('change', (event) => {
+      if (event.target.checked) {
+        body.style.backgroundColor = '#000';
+      } else {
+        body.style.backgroundColor = '#f4f4f4';
       }
     });
   </script>
